@@ -1,5 +1,6 @@
 <?php
 define('LOCAL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/local/');
+define('LOCAL_DIR_PATH', '/local/');
 define('DI_CONFIG_PATH', LOCAL_PATH . 'DI/config.php');
 define('CONSTANTS_PATH', LOCAL_PATH . 'constants/');
 define('MODULES_PATH', LOCAL_PATH . 'modules/');
