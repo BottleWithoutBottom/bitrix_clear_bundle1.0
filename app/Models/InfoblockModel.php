@@ -13,26 +13,31 @@ class InfoblockModel extends Model
     protected $infoblockId;
     protected $symbolCode;
 
-    public function fetch($order = ['ID' => 'ASC'], $filter = [], $select = ['*'])
+    /** Если есть необходимость в создание ЧПУ урлов у инфоблока, у модели нужно вызвать метод setSefMode('/section/#SECTION_URL#'...) */
+    protected $sefMode;
+
+    public function fetch($order = ['ID' => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
     {
         $filter = $this->setFullFilter($filter);
 
         $query = CIBlockElement::GetList($order, $filter, false, false, $select);
+        if ($sefMode) $query->SetUrlTemplates($this->getSefMode());
 
-        if ($row = $query->Fetch()) {
+        if ($row = $query->GetNext()) {
             return $query;
         }
 
         return [];
     }
 
-    public function fetchAll($order = ['ID' => 'ASC'], $filter = [], $select = ['*'])
+    public function fetchAll($order = ['ID' => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
     {
         $filter = $this->setFullFilter($filter);
         $res = [];
-        $query = CIBlockElement::GetList($order, $filter, false, false, $select);
 
-        if ($row = $query->Fetch()) {
+        $query = CIBlockElement::GetList($order, $filter, false, false, $select);
+        if ($sefMode) $query->SetUrlTemplates($this->getSefMode());
+        if ($row = $query->GetNext()) {
             $res[] = $row;
         }
 
@@ -63,7 +68,7 @@ class InfoblockModel extends Model
         $row = CIBlockElement::GetList($order , $preFilter, false, false, $select);
 
         $res = [];
-        while ($element = $row->Fetch()) {
+        while ($element = $row->GetNext()) {
             $res[] = $element;
         }
 
@@ -117,5 +122,19 @@ class InfoblockModel extends Model
     public static function getDefaulOrder()
     {
         return ['ID' => 'ASC'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSefMode() {
+        return $this->sefMode;
+    }
+
+    /**
+     * @param mixed $sefMode
+     */
+    public function setSefMode($sefMode): void {
+        $this->sefMode = $sefMode;
     }
 }
