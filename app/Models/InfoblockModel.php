@@ -44,7 +44,7 @@ class InfoblockModel extends Model
         return $res;
     }
 
-    /** Метод для получения значений свойства типа "привязка к элементу"
+    /** Метод для получения значений свойства типа "привязка к элементу" для элемента CIBlockResult
      * @param array $properties
      * @param string $propertyName
      * @return array
@@ -73,6 +73,42 @@ class InfoblockModel extends Model
         }
 
         return $res;
+    }
+
+    /** Метод достает свойства типа "привязка к элементу сразу для нескольких элементов CIBlockResult" */
+    public function fetchAllElementsProperty($items, $propertyName, $order = ['ID' => 'ASC'], $filter = [], $select = ['*'])
+    {
+        if (empty($items || empty($propertyName))) return false;
+
+        $propertyIds = [];
+
+        //Собираем айдишники со всех элементов
+        foreach ($items as $item) {
+            $itemProps = $item['PROPERTIES'];
+            $propertyId = $itemProps[$propertyName][static::VALUE];
+            if (!empty($propertyId)) {
+                if (is_array($propertyId)) {
+                    $propertyIds = array_merge($propertyId, $propertyIds);
+                } else {
+                    $propertyIds[] = $propertyId;
+                }
+            }
+        }
+
+        if (!empty($propertyIds)) {
+
+            return $this->fetchElementsProperty(
+                [
+                    $propertyName => [static::VALUE => $propertyIds]
+                ],
+                $propertyName,
+                $order,
+                $filter,
+                $select
+            );
+        }
+
+        return false;
     }
 
     public static function addPropertyPrefix($string)
