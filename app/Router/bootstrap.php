@@ -16,7 +16,8 @@ use App\Utils\Container;
  * Router
  */
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addRoute(['GET'], AJAX_VIRTAL_MY, 'App\Controllers\MyController/show');
+    /** Пример использования */
+//    $r->addRoute(['GET'], AJAX_VIRTAL_MY, 'App\Controllers\MyController/show');
 });
 
 //___________________________
