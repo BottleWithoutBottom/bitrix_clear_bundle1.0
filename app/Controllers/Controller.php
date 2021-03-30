@@ -32,8 +32,6 @@ abstract class Controller
 
     public function refreshResponse()
     {
-        if (empty($this->response)) return false;
-
         $this->response = new JSONModel();
         return true;
     }
