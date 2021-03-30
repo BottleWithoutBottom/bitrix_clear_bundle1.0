@@ -2,17 +2,19 @@
 
 namespace App\Controllers;
 use Bitrix\Main\Application;
-use Letsrock\Lib\View\View;
+use App\View\View;
+use App\Models\Vendor\JSONModel;
+use App\Models\Vendor\Response;
 
 abstract class Controller
 {
     protected $view;
+    protected $response;
 
     public function __construct()
     {
         $this->view = new View();
     }
-
 
     public function getRequest()
     {
@@ -26,5 +28,19 @@ abstract class Controller
     public function render($viewName, $params = [])
     {
         return $this->view->render($viewName, $params = []);
+    }
+
+    public function refreshResponse()
+    {
+        if (empty($this->response)) return false;
+
+        $this->response = new JSONModel();
+        return true;
+    }
+
+    public function getResponse(): Response
+    {
+        if (empty($this->response)) $this->refreshResponse();
+        return $this->response;
     }
 }
