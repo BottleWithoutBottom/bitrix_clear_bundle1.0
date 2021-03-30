@@ -1,6 +1,6 @@
 <?php
 
-namespace Letsrock\Lib\Controllers;
+namespace App\Controllers;
 use Bitrix\Main\Application;
 use Letsrock\Lib\View\View;
 

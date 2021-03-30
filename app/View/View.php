@@ -1,6 +1,6 @@
 <?php
 
-namespace Letsrock\Lib\View;
+namespace App\View;
 
 class View
 {
