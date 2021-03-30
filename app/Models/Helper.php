@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Helper;
+namespace App\Models;
 use App\Models\Model;
 
 class Helper extends Model
