@@ -1,9 +1,10 @@
 <?php
 
-namespace Letsrock\Lib\Models;
+namespace App\Models;
+use Letsrock\Lib\Models\Model;
 use Bitrix\Highloadblock\HighloadBlockTable;
 
-abstract class HLModel
+abstract class HLModel extends Model
 {
     protected $hlEntity;
     protected static $HL_ID;
