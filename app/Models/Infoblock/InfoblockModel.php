@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Infoblock;
 use Letsrock\Lib\Models\Highload\HLModel;
 use \Bitrix\Main\Loader;
 use \CIBlockElement;
