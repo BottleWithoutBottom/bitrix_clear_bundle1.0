@@ -1,6 +1,7 @@
 <?php
 
-namespace Letsrock\Lib\Models;
+namespace App\Models;
+use Letsrock\Lib\Models\Highload\HLModel;
 use \Bitrix\Main\Loader;
 use \CIBlockElement;
 
@@ -9,6 +10,9 @@ Loader::includeModule('iblock');
 class InfoblockModel extends Model
 {
     public CONST VALUE = 'VALUE';
+    public CONST ID_STRING = 'ID';
+    public CONST UF_XML_ID = 'UF_XML_ID';
+    public CONST PROPERTIES_STRING = 'PROPERTIES';
 
     protected $infoblockId;
     protected $symbolCode;
@@ -16,7 +20,7 @@ class InfoblockModel extends Model
     /** Если есть необходимость в создание ЧПУ урлов у инфоблока, у модели нужно вызвать метод setSefMode('/section/#SECTION_URL#'...) */
     protected $sefMode;
 
-    public function fetch($order = ['ID' => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
+    public function fetch($order = [self::ID_STRING => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
     {
         $filter = $this->setFullFilter($filter);
 
@@ -30,7 +34,7 @@ class InfoblockModel extends Model
         return [];
     }
 
-    public function fetchAll($order = ['ID' => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
+    public function fetchAll($order = [self::ID_STRING => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
     {
         $filter = $this->setFullFilter($filter);
         $res = [];
@@ -45,11 +49,20 @@ class InfoblockModel extends Model
     }
 
     /** Метод для получения значений свойства типа "привязка к элементу" для элемента CIBlockResult
+     * Если нужно доставать элементы из хайлода, установи $propertyType в 'UF_XML_ID'
      * @param array $properties
      * @param string $propertyName
+     * @param string $propertyType
      * @return array
      */
-    public function fetchElementsProperty($properties, $propertyName, $order = ['ID' => 'ASC'], $filter = [], $select = ['*'])
+    public function fetchElementsProperty(
+        $properties,
+        $propertyName,
+        $order = [self::ID_STRING => 'ASC'],
+        $filter = [],
+        $select = ['*'],
+        $propertyType = self::ID_STRING
+    )
     {
         if (
             empty($properties)
@@ -63,8 +76,9 @@ class InfoblockModel extends Model
         if ($valueIsArray) {
             $preFilter = array_merge($value, $filter);
         } else {
-            $preFilter = array_merge($filter, ['ID' => $value]);
+            $preFilter = array_merge($filter, [$propertyType => $value]);
         }
+
         $row = CIBlockElement::GetList($order , $preFilter, false, false, $select);
 
         $res = [];
@@ -76,7 +90,14 @@ class InfoblockModel extends Model
     }
 
     /** Метод достает свойства типа "привязка к элементу сразу для нескольких элементов CIBlockResult" */
-    public function fetchAllElementsProperty($items, $propertyName, $order = ['ID' => 'ASC'], $filter = [], $select = ['*'])
+    public function fetchAllElementsProperty(
+        $items,
+        $propertyName,
+        $order = [self::ID_STRING => 'ASC'],
+        $filter = [],
+        $select = ['*'],
+        $propertyType = self::ID_STRING
+    )
     {
         if (empty($items || empty($propertyName))) return false;
 
@@ -84,7 +105,7 @@ class InfoblockModel extends Model
 
         //Собираем айдишники со всех элементов
         foreach ($items as $item) {
-            $itemProps = $item['PROPERTIES'];
+            $itemProps = $item[static::PROPERTIES_STRING];
             $propertyId = $itemProps[$propertyName][static::VALUE];
             if (!empty($propertyId)) {
                 if (is_array($propertyId)) {
@@ -109,6 +130,96 @@ class InfoblockModel extends Model
         }
 
         return false;
+    }
+
+    /** Метод для получение элементов из свойств типа Highload
+     * @param array $items
+     * @param string $propertyName
+     * @param string $hlmodelName - название класса хайлод-модели
+     * @param array $order
+     * @param array $filter
+     * @param array $select
+     * @return array|bool
+     */
+    public function fetchALLHLElementsProperty(
+        $items,
+        $propertyName,
+        string $hlmodelName,
+        $order = [self::ID_STRING => 'ASC'],
+        $filter = [],
+        $select = ['*']
+    )
+    {
+        if (
+            empty($items)
+            || empty($propertyName)
+            || empty($hlmodelName)
+        ) return false;
+
+        try {
+            $hlModel = new $hlmodelName();
+        } catch(\ReflectionException $e) {
+            $flog = fopen($_SERVER['DOCUMENT_ROOT'] . "/local/logs/flog.log", "a");fwrite($flog, print_r($e->getMessage(), true));fclose($flog);  // todo remove
+            return false;
+        }
+
+        $propertyIds = [];
+
+        //Собираем UF_XML_ID со всех элементов
+        foreach ($items as $item) {
+            $itemProps = $item[static::PROPERTIES_STRING];
+            $propertyId = $itemProps[$propertyName][static::VALUE];
+            if (!empty($propertyId)) {
+                if (is_array($propertyId)) {
+                    $propertyIds = array_merge($propertyId, $propertyIds);
+                } else {
+                    $propertyIds[] = $propertyId;
+                }
+            }
+        }
+
+        if (!empty($propertyIds)) {
+
+            return $this->fetchHLElementsProperty(
+                [
+                    $propertyName => [static::VALUE => $propertyIds]
+                ],
+                $propertyName,
+                $hlModel,
+                $order,
+                $filter,
+                $select
+            );
+        }
+
+        return false;
+    }
+
+    public function fetchHLElementsProperty(
+        $properties,
+        $propertyName,
+        HLModel $hlModel,
+        $order = [self::ID_STRING => 'ASC'],
+        $filter = [],
+        $select = ['*']
+    )
+    {
+        if (
+            empty($properties)
+            || empty($propertyName)
+            || empty($properties[$propertyName][static::VALUE])
+        ) return [];
+
+        $value = $properties[$propertyName][static::VALUE];
+        $valueIsArray = is_array($value);
+
+        if ($valueIsArray) {
+            $preFilter = array_merge($value, $filter);
+        } else {
+            $preFilter = array_merge($filter, [self::UF_XML_ID => $value]);
+        }
+
+        return $hlModel->fetchAll($order, $preFilter, $select);
     }
 
     public static function addPropertyPrefix($string)
@@ -157,7 +268,7 @@ class InfoblockModel extends Model
 
     public static function getDefaulOrder()
     {
-        return ['ID' => 'ASC'];
+        return [self::ID_STRING => 'ASC'];
     }
 
     /**
