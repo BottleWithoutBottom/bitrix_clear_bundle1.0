@@ -11,6 +11,7 @@ class InfoblockModel extends Model
 {
     public CONST VALUE = 'VALUE';
     public CONST ID_STRING = 'ID';
+    public CONST IB_ID = 'IBLOCK_ID';
     public CONST UF_XML_ID = 'UF_XML_ID';
     public CONST PROPERTIES_STRING = 'PROPERTIES';
 
@@ -49,7 +50,6 @@ class InfoblockModel extends Model
     }
 
     /** Метод для получения значений свойства типа "привязка к элементу" для элемента CIBlockResult
-     * Если нужно доставать элементы из хайлода, установи $propertyType в 'UF_XML_ID'
      * @param array $properties
      * @param string $propertyName
      * @param string $propertyType
@@ -78,14 +78,15 @@ class InfoblockModel extends Model
         } else {
             $preFilter = array_merge($filter, [$propertyType => $value]);
         }
-
         $row = CIBlockElement::GetList($order , $preFilter, false, false, $select);
+        if (!empty($this->getSefMode())) $row->SetUrlTemplates($this->getSefMode());
 
         $res = [];
-        while ($element = $row->GetNext()) {
-            $res[] = $element;
+        while ($element = $row->GetNextElement()) {
+            $elem = $element->getFields();
+            $elem[static::PROPERTIES_STRING] = $element->getProperties();
+            $res[] = $elem;
         }
-
         return $res;
     }
 
