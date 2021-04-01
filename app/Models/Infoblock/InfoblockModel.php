@@ -60,8 +60,7 @@ class InfoblockModel extends Model
         $propertyName,
         $order = [self::ID_STRING => 'ASC'],
         $filter = [],
-        $select = ['*'],
-        $propertyType = self::ID_STRING
+        $select = ['*']
     )
     {
         if (
@@ -71,14 +70,14 @@ class InfoblockModel extends Model
         ) return [];
 
         $value = $properties[$propertyName][static::VALUE];
-        $valueIsArray = is_array($value);
-
-        if ($valueIsArray) {
-            $preFilter = array_merge($value, $filter);
-        } else {
-            $preFilter = array_merge($filter, [$propertyType => $value]);
+        if (is_array($value)) {
+            $value = array_unique($value);
         }
-        $row = CIBlockElement::GetList($order , $preFilter, false, false, $select);
+        $ids = [self::ID_STRING => $value];
+        $preFilter = array_merge($ids, $filter);
+
+        $row = CIBlockElement::GetList($order, $preFilter, false, false, $select);
+
         if (!empty($this->getSefMode())) $row->SetUrlTemplates($this->getSefMode());
 
         $res = [];
@@ -96,8 +95,7 @@ class InfoblockModel extends Model
         $propertyName,
         $order = [self::ID_STRING => 'ASC'],
         $filter = [],
-        $select = ['*'],
-        $propertyType = self::ID_STRING
+        $select = ['*']
     )
     {
         if (empty($items || empty($propertyName))) return false;
