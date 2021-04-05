@@ -41,4 +41,10 @@ abstract class Controller
         if (empty($this->response)) $this->refreshResponse();
         return $this->response;
     }
+
+    public function sendResponse()
+    {
+        http_response_code(200);
+        die($this->getResponse()->getAsString());
+    }
 }
