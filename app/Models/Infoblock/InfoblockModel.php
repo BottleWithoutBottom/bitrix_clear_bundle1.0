@@ -28,8 +28,10 @@ class InfoblockModel extends Model
         $query = CIBlockElement::GetList($order, $filter, false, false, $select);
         if ($sefMode) $query->SetUrlTemplates($this->getSefMode());
 
-        if ($row = $query->GetNext()) {
-            return $row;
+        if ($row = $query->GetNextElement()) {
+            $elem = $row->getFields();
+            $elem[static::PROPERTIES_STRING] = $row->getProperties();
+            return $elem;
         }
 
         return [];
