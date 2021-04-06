@@ -29,7 +29,7 @@ class InfoblockModel extends Model
         if ($sefMode) $query->SetUrlTemplates($this->getSefMode());
 
         if ($row = $query->GetNext()) {
-            return $query;
+            return $row;
         }
 
         return [];
