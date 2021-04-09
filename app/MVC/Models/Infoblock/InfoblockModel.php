@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Infoblock;
-use Letsrock\Lib\Models\Highload\HLModel;
+namespace App\MVC\Models\Infoblock;
+use App\MVC\Models\Highload\HLModel;
+use App\MVC\Models\Model;
 use \Bitrix\Main\Loader;
 use \CIBlockElement;
 
@@ -21,7 +22,12 @@ class InfoblockModel extends Model
     /** Если есть необходимость в создание ЧПУ урлов у инфоблока, у модели нужно вызвать метод setSefMode('/section/#SECTION_URL#'...) */
     protected $sefMode;
 
-    public function fetch($order = [self::ID_STRING => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
+    public function fetch(
+        $order = [self::ID_STRING => 'ASC'],
+        $filter = [],
+        $select = ['*'],
+        $sefMode = false
+    )
     {
         $filter = $this->setFullFilter($filter);
 
@@ -37,7 +43,11 @@ class InfoblockModel extends Model
         return [];
     }
 
-    public function fetchAll($order = [self::ID_STRING => 'ASC'], $filter = [], $select = ['*'], $sefMode = false)
+    public function fetchAll(
+        $order = [self::ID_STRING => 'ASC'],
+        $filter = [], $select = ['*'],
+        $sefMode = false
+    )
     {
         $filter = $this->setFullFilter($filter);
         $res = [];
@@ -78,7 +88,13 @@ class InfoblockModel extends Model
         $ids = [self::ID_STRING => $value];
         $preFilter = array_merge($ids, $filter);
 
-        $row = CIBlockElement::GetList($order, $preFilter, false, false, $select);
+        $row = CIBlockElement::GetList(
+            $order,
+            $preFilter,
+            false,
+            false,
+            $select
+        );
 
         if (!empty($this->getSefMode())) $row->SetUrlTemplates($this->getSefMode());
 

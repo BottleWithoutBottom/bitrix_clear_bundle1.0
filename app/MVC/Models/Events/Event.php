@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models\Events;
+namespace App\MVC\Models\Events;
 
-abstract class Event
+use App\Mvc\Models\Model;
+
+abstract class Event extends Model
 {
     protected $eventName;
 

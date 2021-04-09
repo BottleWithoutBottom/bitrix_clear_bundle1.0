@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\MVC\Controllers;
 use Bitrix\Main\Application;
 use App\View\View;
 use App\Models\Vendor\JSONModel;

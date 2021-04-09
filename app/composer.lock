@@ -487,16 +487,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.2.5",
+            "version": "v5.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "002ab5a36702adf0c9a11e6d8836623253e9045e"
+                "reference": "89412a68ea2e675b4e44f260a5666729f77f668e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/002ab5a36702adf0c9a11e6d8836623253e9045e",
-                "reference": "002ab5a36702adf0c9a11e6d8836623253e9045e",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/89412a68ea2e675b4e44f260a5666729f77f668e",
+                "reference": "89412a68ea2e675b4e44f260a5666729f77f668e",
                 "shasum": ""
             },
             "require": {
@@ -554,9 +554,6 @@
                 "debug",
                 "dump"
             ],
-            "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.2.5"
-            },
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -571,20 +568,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-06T07:59:01+00:00"
+            "time": "2021-03-28T09:42:18+00:00"
         },
         {
             "name": "tightenco/collect",
-            "version": "v8.19.0",
+            "version": "v8.34.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tighten/collect.git",
-                "reference": "0c0243a0dc0b66f54d0ec409f36cd9889665b132"
+                "reference": "b069783ab0c547bb894ebcf8e7f6024bb401f9d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tighten/collect/zipball/0c0243a0dc0b66f54d0ec409f36cd9889665b132",
-                "reference": "0c0243a0dc0b66f54d0ec409f36cd9889665b132",
+                "url": "https://api.github.com/repos/tighten/collect/zipball/b069783ab0c547bb894ebcf8e7f6024bb401f9d2",
+                "reference": "b069783ab0c547bb894ebcf8e7f6024bb401f9d2",
                 "shasum": ""
             },
             "require": {
@@ -621,7 +618,7 @@
                 "collection",
                 "laravel"
             ],
-            "time": "2020-12-19T00:06:29+00:00"
+            "time": "2021-03-29T21:29:00+00:00"
         }
     ],
     "packages-dev": [],

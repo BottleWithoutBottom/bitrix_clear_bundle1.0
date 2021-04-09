@@ -1,6 +1,6 @@
 <?
 
-namespace App\Models\Vendor;
+namespace App\MVC\Models\Vendor;
 
 class JSONModel extends Response
 {

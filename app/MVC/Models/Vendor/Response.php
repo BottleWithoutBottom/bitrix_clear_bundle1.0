@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Vendor;
+namespace App\MVC\Models\Vendor;
 
 abstract class Response
 {

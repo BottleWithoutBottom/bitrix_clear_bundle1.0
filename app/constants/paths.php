@@ -10,8 +10,8 @@ define('VIEWS_PATH', APP_PATH . 'Views/');
 define('DI_CONFIG_PATH', APP_CONFIG_PATH . 'DI.php');
 
 /** LOCAL */
-define('CONSTANTS_PATH', LOCAL_PATH . 'constants/');
-define('MODULES_PATH', LOCAL_PATH . 'modules/');
+define('CONSTANTS_PATH', APP_PATH . 'constants/');
+define('MODULES_PATH', APP_PATH . 'modules/');
 define('AJAX_VIRTUAL_PATH', CONSTANTS_PATH . 'ajax-virtual.php');
-define('INCLUDE_PATH', LOCAL_PATH . 'include/');
+define('INCLUDE_PATH', APP_PATH . 'include/');
 define('COMMON_TEMPLATE_PATH', INCLUDE_PATH . 'templates/');

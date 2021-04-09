@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Models;
-use Letsrock\Lib\Models\Model;
+namespace App\MVC\Models\Highload;
+use App\MVC\Models\Model;
 use Bitrix\Highloadblock\HighloadBlockTable;
 
 abstract class HLModel extends Model

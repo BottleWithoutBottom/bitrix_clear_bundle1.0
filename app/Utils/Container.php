@@ -2,7 +2,6 @@
 
 namespace App\Utils;
 use \DI\ContainerBuilder;
-use Letsrock\Lib\Services\PeopleService;
 
 class Container
 {
