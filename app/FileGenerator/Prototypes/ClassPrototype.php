@@ -4,8 +4,8 @@ namespace App\FileGenerator\Prototypes;
 
 class ClassPrototype extends AbstractPrototype
 {
-    protected $namespace;
-    protected $className;
+    protected string $namespace;
+    protected string $className;
     protected $properties;
     protected $methods;
 
