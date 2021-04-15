@@ -3,6 +3,7 @@
 namespace App\MVC\Models\Infoblock;
 use App\MVC\Models\Highload\HLModel;
 use App\MVC\Models\Model;
+use App\Mvc\Models\BitrixModelTrait;
 use \Bitrix\Main\Loader;
 use \CIBlockElement;
 
@@ -10,6 +11,8 @@ Loader::includeModule('iblock');
 
 class InfoblockModel extends Model
 {
+    use BitrixModelTrait;
+
     public CONST VALUE = 'VALUE';
     public CONST ID_STRING = 'ID';
     public CONST IB_ID = 'IBLOCK_ID';
@@ -281,11 +284,6 @@ class InfoblockModel extends Model
         if (empty($filter)) return $this->getPrefilter();
 
         return array_merge($filter, $this->getPrefilter());
-    }
-
-    public static function getDefaulOrder()
-    {
-        return [self::ID_STRING => 'ASC'];
     }
 
     /**

@@ -2,10 +2,13 @@
 
 namespace App\MVC\Models\Highload;
 use App\MVC\Models\Model;
+use App\MVC\Models\BitrixModelTrait;
 use Bitrix\Highloadblock\HighloadBlockTable;
 
 abstract class HLModel extends Model
 {
+    use BitrixModelTrait;
+
     public CONST UF_ACTIVE = 'UF_ACTIVE';
     public CONST UF_SORT = 'UF_SORT';
     public CONST UF_XML_ID = 'UF_XML_ID';
