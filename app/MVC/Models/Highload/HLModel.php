@@ -6,6 +6,10 @@ use Bitrix\Highloadblock\HighloadBlockTable;
 
 abstract class HLModel extends Model
 {
+    public CONST UF_ACTIVE = 'UF_ACTIVE';
+    public CONST UF_SORT = 'UF_SORT';
+    public CONST UF_XML_ID = 'UF_XML_ID';
+
     protected $hlEntity;
     protected static $HL_ID;
 
@@ -52,5 +56,15 @@ abstract class HLModel extends Model
         $hlblock = HighloadBlockTable::getById(static::$HL_ID)->fetch();
         $entity = HighloadBlockTable::compileEntity($hlblock);
         return $entity->getDataClass();
+    }
+
+    public static function getActiveFilter()
+    {
+        return [static::UF_ACTIVE => 1];
+    }
+
+    public static function getDefaultOrder()
+    {
+        return ['ID' => 'ASC'];
     }
 }
