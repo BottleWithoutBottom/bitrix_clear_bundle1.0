@@ -1,25 +1,23 @@
 <?php
 
 namespace App\FileGenerator\Prototypes;
-
 use App\FileGenerator\Stubs\AbstractStub;
 
 abstract class AbstractPrototype
 {
-    protected $stub;
+    protected $stubString;
 
-    protected function getStub()
+    protected function getStubString(): string
     {
-        return $this->stub;
+        return $this->stubString;
     }
 
-    protected function setStub(AbstractStub $stub)
+    public function setStubString($string): bool
     {
-        $this->setStub($stub);
-    }
+        if (empty($string)) return false;
 
-    protected function processStub()
-    {
+        $this->stubString = $string;
 
+        return true;
     }
 }

@@ -4,22 +4,22 @@ namespace App\FileGenerator\Stubs;
 
 class BitrixInfoblockStub extends BitrixModelStub
 {
-    public function generateStub()
+    public function generateStub(): string
     {
         return
 '<?php
 
-namespace {{namespaceStub}};
-use {{parentClassNamespaceStub}};
+namespace {{namespace}};
+use {{parentNamespace}};
 
-class {{classNameStub}} extends {{parentClassStub}}
+class {{class}} extends {{parentClass}}
 {
     /** PROPERTIES */
-    {{propertiesStub}}
+    {{bitrixProperties}}
     /** END PROPERTIES */
     
-    protected $symbolCode = {{symbolCodeStub}};
-    protected $infoblockId = {{infoblockIdStub}};
+    protected $symbolCode = {{symbolCode}};
+    protected $infoblockId = {{infoblockId}};
 }
 ';
     }

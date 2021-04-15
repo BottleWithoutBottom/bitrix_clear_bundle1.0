@@ -17,6 +17,6 @@ abstract class AbstractStub implements StubInterface
         return true;
     }
 
-    abstract public function generateStub();
+    abstract public function generateStub(): string;
 
 }
