@@ -5,23 +5,23 @@ namespace App\FileGenerator\Prototypes;
 class ClassPrototype extends AbstractPrototype
 {
     protected string $namespace;
-    protected string $className;
+    protected string $class;
     protected array $properties;
 
     /**
      * @return string
      */
-    public function getClassName()
+    public function getClass()
     {
-        return $this->className;
+        return $this->class;
     }
 
     /**
-     * @param string $className
+     * @param string $class
      */
-    public function setClassName($className): void
+    public function setClass($class): void
     {
-        $this->className = $className;
+        $this->class = $class;
     }
 
     /**

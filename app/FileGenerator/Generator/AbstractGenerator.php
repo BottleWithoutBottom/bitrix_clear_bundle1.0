@@ -9,14 +9,20 @@ class AbstractGenerator implements GeneratorInterface
 {
     protected AbstractStub $stub;
     protected AbstractPrototype $prototype;
+    protected string $stubString;
 
     public function getStub() {
         return $this->stub;
     }
 
-    public function generateStub(): string
+    public function getStubString(): string
     {
-        return $this->getStub()->generateStub();
+        return $this->stubString;
+    }
+
+    public function generate()
+    {
+        $this->stubString = $this->stub->generateStub();
     }
 
     public function setStub($stub): void
