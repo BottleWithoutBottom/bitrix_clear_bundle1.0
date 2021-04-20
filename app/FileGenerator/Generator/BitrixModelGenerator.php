@@ -4,9 +4,9 @@ namespace App\FileGenerator\Generator;
 
 class BitrixModelGenerator extends ClassGenerator
 {
-    public function generate()
+    public function generate(): bool
     {
-        parent::generate();
+        return parent::generate();
     }
 
 }

@@ -4,8 +4,10 @@ namespace App\FileGenerator\Prototypes;
 
 class ClassPrototype extends AbstractPrototype
 {
-    protected string $namespace;
-    protected string $class;
+    protected string $namespace = '';
+    protected string $class = '';
+    protected string $parentClass = '';
+    protected string $parentNamespace = '';
     protected array $properties;
 
     /**
@@ -13,7 +15,7 @@ class ClassPrototype extends AbstractPrototype
      */
     public function getClass()
     {
-        return $this->class;
+        return isset($this->class) ? $this->class : '';
     }
 
     /**
@@ -44,7 +46,7 @@ class ClassPrototype extends AbstractPrototype
      */
     public function getNamespace()
     {
-        return $this->namespace;
+        return isset($this->namespace) ? $this->namespace : '';
     }
 
     /**
@@ -53,5 +55,25 @@ class ClassPrototype extends AbstractPrototype
     public function setNamespace($namespace): void
     {
         $this->namespace = $namespace;
+    }
+
+    public function getParentNamespace()
+    {
+        return isset($this->parentNamespace) ? $this->parentNamespace : '';
+    }
+
+    public function setParentNamespace($namespace)
+    {
+        $this->parentNamespace = $namespace;
+    }
+
+    public function getParentClass()
+    {
+        return isset($this->parentClass) ? $this->parentClass : '';
+    }
+
+    public function setParentClass($class)
+    {
+        $this->parentClass = $class;
     }
 }

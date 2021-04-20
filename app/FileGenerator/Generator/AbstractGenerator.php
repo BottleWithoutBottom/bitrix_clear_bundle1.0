@@ -20,9 +20,10 @@ class AbstractGenerator implements GeneratorInterface
         return $this->stubString;
     }
 
-    public function generate()
+    public function generate(): bool
     {
         $this->stubString = $this->stub->generateStub();
+        return true;
     }
 
     public function setStub($stub): void

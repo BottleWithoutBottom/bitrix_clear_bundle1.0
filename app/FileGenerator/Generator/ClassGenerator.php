@@ -30,18 +30,42 @@ class ClassGenerator extends AbstractGenerator
         $this->setStub($stub);
     }
 
-    public function generate()
+    public function generate(): bool
     {
-        parent::generate();
-        $class = $this->getPrototype()->getClass();
-        if (!empty($class)) {
-            $this->placeClass($this->getPrototype());
+        if (parent::generate()) {
+            $class = $this->getPrototype()->getClass();
+            if (!empty($class)) {
+                $this->placeClass($this->getPrototype());
+
+                $namespace = $this->getPrototype()->getNamespace();
+                if (!empty($namespace)) {
+                    $this->placeNamespace($this->getPrototype());
+
+                    $this->placeParentClass($this->getPrototype());
+                    $this->placeParentNamespace($this->getPrototype());
+                    return true;
+                }
+            }
         }
 
-        $namespace = $this->getPrototype()->getNamespace();
-        if (!empty($namespace)) {
-            $this->placeNamespace($this->getPrototype());
-        }
+        return false;
+    }
+
+    protected function createConst(
+        string $name,
+        string $value,
+        string $access = 'public',
+        bool $disablePreString = false,
+        bool $disableLastSymbol = false,
+        string $preString = "\t"
+    ): string
+    {
+        if (empty($name) || empty($value)) return '';
+
+        $preStringSymbol = !$disablePreString ? $preString : '';
+        $breakStringSymbol = !$disableLastSymbol ? "\n" : '';
+
+        return $preStringSymbol . $access . ' CONST ' . $name . ' = ' . "'" . $value . "'" . ';' . $breakStringSymbol;
     }
 
     private function placeClass(
