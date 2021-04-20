@@ -4,6 +4,7 @@ $stub = new App\FileGenerator\Stubs\BitrixInfoblockStub();
 
 $prototype = new App\FileGenerator\Prototypes\BitrixInfoblockPrototype();
 $prototype->setClass('Entity');
+$prototype->setNamespace('App\Model\Infoblock');
 $classGenerator = new \App\FileGenerator\Generator\BitrixModelGenerator(
     $prototype,
     new \App\FileGenerator\Stubs\BitrixInfoblockStub()

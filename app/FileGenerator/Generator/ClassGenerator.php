@@ -20,6 +20,10 @@ class ClassGenerator extends AbstractGenerator
         '{{parentClass}}', '{{ parentClass }}'
     ];
 
+    protected $parentNamespaceStubs = [
+        '{{parentNamespace}}', '{{ parentNamespace }}'
+    ];
+
     public function __construct(ClassPrototype $prototype, ClassStub $stub)
     {
         $this->setPrototype($prototype);
@@ -33,29 +37,11 @@ class ClassGenerator extends AbstractGenerator
         if (!empty($class)) {
             $this->placeClass($this->getPrototype());
         }
-    }
 
-    protected function generateNamespace($stub)
-    {
         $namespace = $this->getPrototype()->getNamespace();
-
         if (!empty($namespace)) {
-            $this->setNamespace($stub, $namespace);
+            $this->placeNamespace($this->getPrototype());
         }
-
-        return $this;
-    }
-
-    protected function setNamespace(string $stub, string $namespace): bool
-    {
-        if (empty($stub) || empty($namespace)) return false;
-
-        foreach ($this->namespaceStubs as $stubVariant) {
-            $stub = str_replace($stubVariant, $namespace, $stub);
-        }
-
-        $this->getPrototype()->setStubString($stub);
-        return true;
     }
 
     private function placeClass(
@@ -68,7 +54,77 @@ class ClassGenerator extends AbstractGenerator
                 if (strrpos($this->getStubString(), $classStub)) {
                     $newStub = str_replace($classStub, $class, $this->getStubString());
                     $this->stubString = $newStub;
-                    while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($newStub);echo("</pre>");die();
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function placeNamespace(
+        AbstractPrototype $prototype
+    ) {
+        $namespace = $prototype->getNamespace();
+        if (!empty($namespace)) {
+            foreach ($this->namespaceStubs as $namespaceStub) {
+                if (strrpos($this->getStubString(), $namespaceStub)) {
+                    $newStub = str_replace($namespaceStub, $namespace, $this->getStubString());
+                    $this->stubString = $newStub;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function placeParentNamespace(
+        AbstractPrototype $prototype
+    ) {
+        $parentNamespace = $prototype->getParentNamespace();
+
+        if (!empty($parentNamespace)) {
+            foreach ($this->parentNamespaceStubs as $parentNamespaceStub) {
+                if (strrpos($this->getStubString(), $parentNamespaceStub)) {
+                    $newStub = str_replace($parentNamespaceStub, $parentNamespace, $this->getStubString());
+                    $this->stubString = $newStub;
+                    return true;
+                }
+            }
+        } else {
+            foreach ($this->parentNamespaceStubs as $parentNamespaceStub) {
+                $removalStubString = 'use ' . $parentNamespaceStub . ';';
+                if (strrpos($this->getStubString(), $removalStubString)) {
+                    $newStub = str_replace($removalStubString, '', $this->getStubString());
+                    $this->stubString = $newStub;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function placeParentClass(
+        AbstractPrototype $prototype
+    ) {
+        $parentClass = $prototype->getParentClass();
+
+        if (!empty($parentClass)) {
+            foreach ($this->parentClassStubs as $parentClassStub) {
+                if (strrpos($this->getStubString(), $parentClassStub)) {
+                    $newStub = str_replace($parentClassStub, $parentClass, $this->getStubString());
+                    $this->stubString = $newStub;
+                    return true;
+                }
+            }
+        } else {
+            foreach ($this->parentClassStubs as $parentClassStub) {
+                $removalStubString = ' extends ' . $parentClassStub;
+                if (strrpos($this->getStubString(), $removalStubString)) {
+                    $newStub = str_replace($removalStubString, '', $this->getStubString());
+                    $this->stubString = $newStub;
                     return true;
                 }
             }
