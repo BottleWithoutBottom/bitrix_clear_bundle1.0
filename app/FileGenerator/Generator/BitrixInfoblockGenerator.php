@@ -24,7 +24,7 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
     public function __construct(ClassPrototype $prototype, ClassStub $stub) {
         parent::__construct($prototype, $stub);
 
-        $this->path = $this->path . '/Infoblock/';
+        $this->path = $this->path . 'Infoblock/';
     }
 
     public function generate(): bool
@@ -41,6 +41,19 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
 
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    public function setClassNameBySymbolCode()
+    {
+        if (!empty($this->getPrototype()->getSymbolCode())) {
+            $fileName = mb_strtolower($this->getPrototype()->getSymbolCode());
+
+            $fileName = preg_replace('^ib_', '', $fileName);
+
+            return $this->setFileName(ucfirst($fileName));
         }
 
         return false;

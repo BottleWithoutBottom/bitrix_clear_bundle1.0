@@ -8,7 +8,6 @@ use App\FileGenerator\Stubs\ClassStub;
 
 class ClassGenerator extends AbstractGenerator
 {
-    protected $path;
 
     protected $namespaceStubs = [
         '{{namespace}}', '{{ namespace }}'
@@ -28,6 +27,7 @@ class ClassGenerator extends AbstractGenerator
 
     public function __construct(ClassPrototype $prototype, ClassStub $stub)
     {
+        parent::__construct();
         $this->setPrototype($prototype);
         $this->setStub($stub);
     }
@@ -38,6 +38,7 @@ class ClassGenerator extends AbstractGenerator
             $class = $this->getPrototype()->getClass();
             if (!empty($class)) {
                 $this->placeClass($this->getPrototype());
+                $this->setFileName($this->getPrototype()->getClass());
 
                 $namespace = $this->getPrototype()->getNamespace();
                 if (!empty($namespace)) {

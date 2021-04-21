@@ -40,6 +40,19 @@ class BitrixInfoblockPrototype extends BitrixModelPrototype
         $this->symbolCode = $symbolCode;
     }
 
+    public function setClassNameBySymbolCode()
+    {
+        if (!empty($this->getSymbolCode())) {
+            $fileName = mb_strtolower($this->getSymbolCode());
+
+            $fileName = preg_replace('#^ib_#', '', $fileName);
+
+            return $this->setClass(ucfirst($fileName));
+        }
+
+        return false;
+    }
+
     /**
      * @return array
      */
@@ -52,24 +65,5 @@ class BitrixInfoblockPrototype extends BitrixModelPrototype
      */
     public function setBitrixProperties(array $bitrixProperties): void {
         $this->bitrixProperties = $bitrixProperties;
-    }
-
-    // собирает названия свйоств инфоблока и помещает их в константы
-    public function processBitrixProperties()
-    {
-        if (!empty($this->getBitrixProperties()))
-        {
-            $finalString = '/n';
-            $publicConst = 'public CONST';
-            foreach($this->getBitrixProperties() as $property)
-            {
-                $string = $publicConst . ' ' . mb_strtoupper($property) . ' = ' . $property . '\n';
-                $finalString .= $string;
-            }
-
-            $finalString .= '\n';
-        }
-
-        return $finalString;
     }
 }
