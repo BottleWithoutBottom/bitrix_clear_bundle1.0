@@ -20,14 +20,13 @@ class AbstractGenerator implements GeneratorInterface
     public function __construct()
     {
         $this->files = new Filesystem();
+        $this->path = $_SERVER['DOCUMENT_ROOT'];
     }
 
     public function placeFile($path, $content): bool
     {
         if (empty($path)) throw new FileNotFoundException('Filename is not correct');
-
-        $this->files->put($path, $content);
-        return true;
+        return $this->files->put($path, $content);
     }
 
     public function setFileName(string $fileName): bool
