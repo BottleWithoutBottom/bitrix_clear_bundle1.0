@@ -8,6 +8,8 @@ use App\FileGenerator\Stubs\ClassStub;
 
 class ClassGenerator extends AbstractGenerator
 {
+    protected $path;
+
     protected $namespaceStubs = [
         '{{namespace}}', '{{ namespace }}'
     ];
@@ -49,6 +51,20 @@ class ClassGenerator extends AbstractGenerator
         }
 
         return false;
+    }
+
+    public function put(string $fileName)
+    {
+        if (empty($this->path || empty($fileName))) return false;
+
+        $filePath = $this->path . $fileName;
+
+        if ($this->files->exists($filePath)) {
+            $this->files->replace($filePath, $this->getStubString());
+            return true;
+        }
+        $this->files->put($filePath, $this->getStubString());
+        return true;
     }
 
     protected function createConst(

@@ -13,6 +13,7 @@ $classGenerator = new \App\FileGenerator\Generator\BitrixInfoblockGenerator(
     $prototype,
     new \App\FileGenerator\Stubs\BitrixInfoblockStub()
 );
+while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($classGenerator->getPath());echo("</pre>");die();
 if ($classGenerator->generate()) {
     file_put_contents('./class.php', $classGenerator->getStubString());
 }

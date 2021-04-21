@@ -3,7 +3,9 @@
 namespace App\FileGenerator\Generator;
 
 use App\FileGenerator\Prototypes\BitrixInfoblockPrototype;
+use App\FileGenerator\Prototypes\ClassPrototype;
 use App\FileGenerator\Stubs\BitrixInfoblockStub;
+use App\FileGenerator\Stubs\ClassStub;
 
 class BitrixInfoblockGenerator extends BitrixModelGenerator
 {
@@ -18,6 +20,12 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
     protected $bitrixPropertiesStubs = [
         '{{bitrixProperties}}', '{{ bitrixProperties }}'
     ];
+
+    public function __construct(ClassPrototype $prototype, ClassStub $stub) {
+        parent::__construct($prototype, $stub);
+
+        $this->path = $this->path . '/Infoblock/';
+    }
 
     public function generate(): bool
     {
