@@ -21,9 +21,12 @@ class ClassPrototype extends AbstractPrototype
     /**
      * @param string $class
      */
-    public function setClass($class): void
+    public function setClass($class)
     {
+        if (empty($class)) return false;
+
         $this->class = $class;
+        return true;
     }
 
     /**
