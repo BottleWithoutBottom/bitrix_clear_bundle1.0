@@ -1,13 +1,16 @@
 <?php
 
 namespace App\FileGenerator\Prototypes;
+use App\FileGenerator\Prototypes\CommentTrait;
 
 class ClassPrototype extends AbstractPrototype
 {
+    use CommentTrait;
     protected string $namespace = '';
     protected string $class = '';
     protected string $parentClass = '';
     protected string $parentNamespace = '';
+    protected string $comment = '';
     protected array $properties;
 
     /**
@@ -78,5 +81,18 @@ class ClassPrototype extends AbstractPrototype
     public function setParentClass($class)
     {
         $this->parentClass = $class;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+
+    public function setComment($comment): bool
+    {
+        if (empty($comment)) return false;
+
+        $this->comment = $comment;
+        return true;
     }
 }

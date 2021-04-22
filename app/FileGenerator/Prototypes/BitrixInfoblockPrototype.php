@@ -46,7 +46,7 @@ class BitrixInfoblockPrototype extends BitrixModelPrototype
             $fileName = mb_strtolower($this->getSymbolCode());
 
             $fileName = ucfirst(preg_replace('#^ib_#', '', $fileName));
-            $this->checkCamel($fileName);
+            $fileName = $this->checkCamel($fileName);
             return $this->setClass($fileName);
         }
 

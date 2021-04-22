@@ -8,6 +8,11 @@ use App\FileGenerator\Stubs\ClassStub;
 
 class ClassGenerator extends AbstractGenerator
 {
+    protected $commentDemanded = false;
+
+    protected $commentStubs = [
+        '{{commentStub}}', '{{ commentStub }}'
+    ];
 
     protected $namespaceStubs = [
         '{{namespace}}', '{{ namespace }}'
@@ -35,6 +40,8 @@ class ClassGenerator extends AbstractGenerator
     public function generate(): bool
     {
         if (parent::generate()) {
+            if ($this->commentDemanded) $this->placeComment($this->getPrototype()->getComment());
+
             $class = $this->getPrototype()->getClass();
             if (!empty($class)) {
                 $this->placeClass($this->getPrototype());
@@ -69,6 +76,27 @@ class ClassGenerator extends AbstractGenerator
         $breakStringSymbol = !$disableLastSymbol ? "\n" : '';
 
         return $preStringSymbol . $access . ' CONST ' . $name . ' = ' . "'" . $value . "'" . ';' . $breakStringSymbol;
+    }
+
+    private function placeComment($comment)
+    {
+        if (!empty($comment)) {
+            foreach ($this->commentStubs as $commentStub) {
+                if (strrpos($this->getStubString(), $commentStub)) {
+                    $newStub = str_replace($commentStub, $comment, $this->getStubString());
+                    $this->stubString = $newStub;
+                    return true;
+                }
+            }
+        } else {
+            foreach ($this->commentStubs as $commentStub) {
+                if (strrpos($this->getStubString(), $commentStub)) {
+                    $newStub = str_replace($commentStub, '', $this->getStubString());
+                    $this->stubString = $newStub;
+                    return true;
+                }
+            }
+        }
     }
 
     private function placeClass(
@@ -158,5 +186,10 @@ class ClassGenerator extends AbstractGenerator
         }
 
         return false;
+    }
+
+    public function setCommentIsDemanded(bool $demanded = false)
+    {
+        $this->commentDemanded = $demanded;
     }
 }
