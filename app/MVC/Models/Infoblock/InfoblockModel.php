@@ -14,6 +14,7 @@ class InfoblockModel extends Model
     use BitrixModelTrait;
 
     public CONST VALUE = 'VALUE';
+    public CONST NAME = 'NAME';
     public CONST ID_STRING = 'ID';
     public CONST IB_ID = 'IBLOCK_ID';
     public CONST UF_XML_ID = 'UF_XML_ID';
@@ -22,7 +23,9 @@ class InfoblockModel extends Model
     protected $infoblockId;
     protected $symbolCode;
 
-    /** Если есть необходимость в создание ЧПУ урлов у инфоблока, у модели нужно вызвать метод setSefMode('/section/#SECTION_URL#'...) */
+    /** Если есть необходимость в создание ЧПУ урлов у инфоблока,
+     * у модели нужно вызвать метод setSefMode('/section/#SECTION_URL#'...)
+     */
     protected $sefMode;
 
     public function fetch(
@@ -48,7 +51,8 @@ class InfoblockModel extends Model
 
     public function fetchAll(
         $order = [self::ID_STRING => 'ASC'],
-        $filter = [], $select = ['*'],
+        $filter = [],
+        $select = ['*'],
         $sefMode = false
     )
     {
@@ -57,14 +61,17 @@ class InfoblockModel extends Model
 
         $query = CIBlockElement::GetList($order, $filter, false, false, $select);
         if ($sefMode) $query->SetUrlTemplates($this->getSefMode());
-        if ($row = $query->GetNext()) {
-            $res[] = $row;
+        while ($row = $query->GetNextElement()) {
+            $element = $row->getFields();
+            $element[static::PROPERTIES_STRING] = $row->getProperties();
+            $res[] = $element;
         }
 
         return $res;
     }
 
-    /** Метод для получения значений свойства типа "привязка к элементу" для элемента CIBlockResult
+    /** Метод для получения значений свойства
+     * типа "привязка к элементу" для элемента CIBlockResult
      * @param array $properties
      * @param string $propertyName
      * @param string $propertyType
@@ -91,26 +98,26 @@ class InfoblockModel extends Model
         $ids = [self::ID_STRING => $value];
         $preFilter = array_merge($ids, $filter);
 
-        $row = CIBlockElement::GetList(
-            $order,
-            $preFilter,
-            false,
-            false,
-            $select
-        );
+        $row = CIBlockElement::GetList($order, $preFilter, false, false, $select);
 
         if (!empty($this->getSefMode())) $row->SetUrlTemplates($this->getSefMode());
 
         $res = [];
-        while ($element = $row->GetNextElement()) {
-            $elem = $element->getFields();
-            $elem[static::PROPERTIES_STRING] = $element->getProperties();
-            $res[] = $elem;
+        while ($element = $row->GetNext()) {
+            $properties = $this->getPropertiesInItem($element);
+
+            if (!empty($properties)) {
+                $element[static::PROPERTIES_STRING] = $properties;
+            }
+            $res[] = $element;
         }
+
         return $res;
     }
 
-    /** Метод достает свойства типа "привязка к элементу сразу для нескольких элементов CIBlockResult" */
+    /** Метод достает свойства типа
+     * "привязка к элементу сразу для нескольких элементов CIBlockResult"
+     */
     public function fetchAllElementsProperty(
         $items,
         $propertyName,
@@ -264,6 +271,16 @@ class InfoblockModel extends Model
         return static::addValuePostfix(static::addPropertyPrefix($string));
     }
 
+    public static function removePropertyEnclose($string)
+    {
+        return preg_replace(['#PROPERTY_#', '#_VALUE#'], '', $string);
+    }
+
+    public static function checkPropertyEnclose($string)
+    {
+        return preg_match('#^PROPERTY_.*_VALUE$#', $string);
+    }
+
     public function getSymbolCode()
     {
         return $this->symbolCode;
@@ -272,6 +289,14 @@ class InfoblockModel extends Model
     public function getInfoblockId()
     {
         return $this->infoblockId;
+    }
+
+    public function setInfoblockId($id)
+    {
+        if (empty($id)) return false;
+
+        $this->infoblockId = (int)$id;
+        return true;
     }
 
     private function getPrefilter()
@@ -286,6 +311,24 @@ class InfoblockModel extends Model
         return array_merge($filter, $this->getPrefilter());
     }
 
+    public static function getIbProps(
+        $arOrder = [],
+        $filter = []
+    ) {
+        if (empty($filter[static::IB_ID])) return false;
+
+        $propsList = \CIBlockProperty::GetList(
+            $arOrder,
+            $filter
+        );
+
+        while ($propsRow = $propsList->GetNext()) {
+            $res[] = $propsRow;
+        }
+
+        return collect($res);
+    }
+
     /**
      * @return mixed
      */
@@ -298,5 +341,30 @@ class InfoblockModel extends Model
      */
     public function setSefMode($sefMode): void {
         $this->sefMode = $sefMode;
+    }
+
+    private static function lookForPropertyKey($key)
+    {
+        return substr('PROPERTY_', $key);
+    }
+
+    /** принимает массив, полученный при помощи GetNext
+    и приводит к виду, в котором у элемента сформирован массив PROPERTIES и в него попадают символьный код свойства и массив VALUE со значениями
+     */
+    private function getPropertiesInItem($item)
+    {
+        if (empty($item)) return false;
+        $properties = [];
+
+        foreach ($item as $fieldKey => $fieldValue) {
+            if (static::checkPropertyEnclose($fieldKey)) {
+                $clearPropertyCode = static::removePropertyEnclose($fieldKey);
+
+                if ($clearPropertyCode) {
+                    $properties[$clearPropertyCode][static::VALUE] = $fieldValue;
+                }
+            }
+        }
+        return $properties;
     }
 }
