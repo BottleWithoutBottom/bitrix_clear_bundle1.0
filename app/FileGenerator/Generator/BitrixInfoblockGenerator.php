@@ -52,7 +52,6 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
             $fileName = mb_strtolower($this->getPrototype()->getSymbolCode());
 
             $fileName = preg_replace('^ib_', '', $fileName);
-
             return $this->setFileName(ucfirst($fileName));
         }
 

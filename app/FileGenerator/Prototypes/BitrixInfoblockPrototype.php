@@ -45,9 +45,9 @@ class BitrixInfoblockPrototype extends BitrixModelPrototype
         if (!empty($this->getSymbolCode())) {
             $fileName = mb_strtolower($this->getSymbolCode());
 
-            $fileName = preg_replace('#^ib_#', '', $fileName);
-
-            return $this->setClass(ucfirst($fileName));
+            $fileName = ucfirst(preg_replace('#^ib_#', '', $fileName));
+            $this->checkCamel($fileName);
+            return $this->setClass($fileName);
         }
 
         return false;
@@ -65,5 +65,16 @@ class BitrixInfoblockPrototype extends BitrixModelPrototype
      */
     public function setBitrixProperties(array $bitrixProperties): void {
         $this->bitrixProperties = $bitrixProperties;
+    }
+
+    private function checkCamel($string, $symbol = '_')
+    {
+        if ($position = strpos($string, $symbol)) {
+            $firstPart = substr($string, 0, $position);
+            $secondPart = ucfirst(substr($string, $position + 1));
+            $newString = $firstPart . $secondPart;
+            return $this->checkCamel($newString);
+        }
+        return $string;
     }
 }
