@@ -2,9 +2,9 @@
 
 namespace App\MVC\Controllers;
 use Bitrix\Main\Application;
-use App\View\View;
-use App\Models\Vendor\JSONModel;
-use App\Models\Vendor\Response;
+use App\MVC\View\View;
+use App\MVC\Models\Vendor\JSONModel;
+use App\MVC\Models\Vendor\Response;
 
 abstract class Controller
 {
