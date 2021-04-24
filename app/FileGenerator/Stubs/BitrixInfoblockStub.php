@@ -15,19 +15,19 @@ class BitrixInfoblockStub extends BitrixModelStub
     public function generateStub(): string
     {
         return
-'<?php
+"<?php
 
 namespace {{namespace}};
 use {{parentNamespace}};
 
 class {{class}} extends {{parentClass}}
-{' .
+{
+" .
     $this->getBitrixProperiesStub()
     
-    . 'protected $symbolCode = {{symbolCode}};
+    . "\n\tprotected" . ' $symbolCode = {{symbolCode}};
     protected $infoblockId = {{infoblockId}};
-}
-';
+}';
     }
 
     public function getBitrixProperiesStub(): string
