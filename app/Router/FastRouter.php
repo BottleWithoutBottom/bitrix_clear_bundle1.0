@@ -15,7 +15,6 @@ class FastRouter extends Router
     public function handle()
     {
         $dispatcher = $this->getDispatcher();
-        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r(123);echo("</pre>");die();
         if ($dispatcher) {
             $httpMethod = $_SERVER['REQUEST_METHOD'];
             $uri = $_SERVER['REQUEST_URI'];
