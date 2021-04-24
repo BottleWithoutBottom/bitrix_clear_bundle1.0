@@ -1,6 +1,6 @@
 <?php
 define('LOCAL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/local/');
-define('LOCAL_DIR_PATH', SITE_DIR . 'local/');
+define('LOCAL_DIR_PATH', '/local/');
 
 /** APP */
 define('APP_PATH', LOCAL_PATH . 'app/');

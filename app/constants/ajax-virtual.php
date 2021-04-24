@@ -1,3 +1,3 @@
 <?php
 
-define('AJAX_VIRTUAL', SITE_DIR . 'ajax-virtual/');
+define('AJAX_VIRTUAL', '/ajax-virtual/');
