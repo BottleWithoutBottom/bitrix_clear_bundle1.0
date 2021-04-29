@@ -7,7 +7,10 @@ use App\FileGenerator\Stubs\ClassStub;
 
 class BitrixModelGenerator extends ClassGenerator
 {
-    public function __construct(ClassPrototype $prototype, ClassStub $stub) {
+    public function __construct(
+        ClassPrototype $prototype,
+        ClassStub $stub
+    ) {
         parent::__construct($prototype, $stub);
         $this->path = $this->path . '/local/app/MVC/Models/';
     }

@@ -9,6 +9,8 @@ use App\FileGenerator\Stubs\ClassStub;
 
 class BitrixInfoblockGenerator extends BitrixModelGenerator
 {
+    protected $generatedPath;
+
     protected $symbolCodeStubs = [
         '{{symbolCode}}', '{{ symbolCode }}'
     ];
@@ -21,10 +23,14 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
         '{{bitrixProperties}}', '{{ bitrixProperties }}'
     ];
 
-    public function __construct(ClassPrototype $prototype, ClassStub $stub) {
+    public function __construct(
+        ClassPrototype $prototype,
+        ClassStub $stub
+    ) {
         parent::__construct($prototype, $stub);
 
         $this->path = $this->path . 'Infoblock/';
+        $this->generatedPath = $this->path . 'Generated/';
     }
 
     public function generate(): bool
