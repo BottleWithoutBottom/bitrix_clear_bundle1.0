@@ -30,8 +30,10 @@ class ClassGenerator extends AbstractGenerator
         '{{parentNamespace}}', '{{ parentNamespace }}'
     ];
 
-    public function __construct(ClassPrototype $prototype, ClassStub $stub)
-    {
+    public function __construct(
+        ClassPrototype $prototype,
+        ClassStub $stub
+    ) {
         parent::__construct();
         $this->setPrototype($prototype);
         $this->setStub($stub);

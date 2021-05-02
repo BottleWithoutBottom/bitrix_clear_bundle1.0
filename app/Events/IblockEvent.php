@@ -2,9 +2,10 @@
 
 namespace App\Events;
 
-use App\FileGenerator\Generator\BitrixInfoblockGenerator;
 use App\FileGenerator\Prototypes\BitrixInfoblockPrototype;
 use App\FileGenerator\Stubs\BitrixInfoblockStub;
+use App\FileGenerator\GenetratorCommand\BitrixInfoblockGeneratorCommand as BitInfoblockComm;
+use App\MVC\Models\Infoblock\InfoblockModel;
 
 class IblockEvent extends Event
 {
@@ -17,26 +18,37 @@ class IblockEvent extends Event
 
             $properties = IblockEvent::getPropertiesSymbolCodes($infoblockId);
 
-            $prototype = new BitrixInfoblockPrototype();
-            $prototype->setSymbolCode($symbolCode);
-            $prototype->setClassNameBySymbolCode();
-            $prototype->setNamespace('App\MVC\Models\Infoblock');
-            $prototype->setParentNamespace('App\MVC\Models\Infoblock');
-            $prototype->setInfoblockId($infoblockId);
-            $prototype->setBitrixProperties($properties);
-            $stub = new BitrixInfoblockStub();
+//            $prototype = new BitrixInfoblockPrototype();
+//            $prototype->setSymbolCode($symbolCode);
+//            $prototype->setClassNameBySymbolCode();
+//            $prototype->setNamespace('App\MVC\Models\Infoblock');
+//            $prototype->setParentNamespace('App\MVC\Models\Infoblock');
+//            $prototype->setInfoblockId($infoblockId);
+//            $prototype->setBitrixProperties($properties);
+//            $stub = new BitrixInfoblockStub();
 
-            $generator = new BitrixInfoblockGenerator(
-                $prototype,
-                $stub
+            $command = new BitInfoblockComm(
+                new BitrixInfoblockPrototype(),
+                new BitrixInfoblockStub()
             );
 
-            if ($generator->generate()) {
-                $generator->placeFile(
-                    $generator->getFullFilePath(),
-                    $generator->getStubString()
-                );
-            }
+            $infoblockModelReflection = new \ReflectionClass(new InfoblockModel());
+
+            $command->execute([
+                BitInfoblockComm::IBLOCK_ID => $infoblockId,
+                BitInfoblockComm::SYMBOL_CODE => $symbolCode,
+                BitInfoblockComm::PROPERTIES => $properties,
+                BitInfoblockComm::PARENT_CLASS_NAME => $infoblockModelReflection->getName(),
+                BitInfoblockComm::NAMESPACE => $infoblockModelReflection->getNamespaceName(),
+                BitInfoblockComm::PARENT_NAMESPACE => $infoblockModelReflection->getNamespaceName()
+            ]);
+
+//            if ($generator->generate()) {
+//                $generator->placeFile(
+//                    $generator->getFullFilePath(),
+//                    $generator->getStubString()
+//                );
+//            }
         }
     }
 
