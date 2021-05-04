@@ -24,7 +24,14 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
                     $this->generator->getStubString()
                     )
                 ) {
-
+                    if ($this->initPrototype($params)) {
+                        if ($this->generator->generate()) {
+                            $this->generator->placeFile(
+                                $this->generator->getFullFilePath(),
+                                $this->generator->getStubString()
+                            );
+                        }
+                    }
                 }
 
             }
