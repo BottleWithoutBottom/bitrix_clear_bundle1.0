@@ -19,15 +19,6 @@ class IblockEvent extends Event
             $infoblockId = $arFields['ID'];
 
             $properties = IblockEvent::getPropertiesSymbolCodes($infoblockId);
-
-//            $prototype = new BitrixInfoblockPrototype();
-//            $prototype->setSymbolCode($symbolCode);
-//            $prototype->setClassNameBySymbolCode();
-//            $prototype->setNamespace('App\MVC\Models\Infoblock');
-//            $prototype->setParentNamespace('App\MVC\Models\Infoblock');
-//            $prototype->setInfoblockId($infoblockId);
-//            $prototype->setBitrixProperties($properties);
-//            $stub = new BitrixInfoblockStub();
             $command = new BitInfoblockComm(
                 new BitrixInfoblockStub(),
                 new BitrixInfoblockPrototype(),
@@ -42,18 +33,11 @@ class IblockEvent extends Event
                 BitInfoblockComm::PROPERTIES => $properties,
                 BitInfoblockComm::PARENT_CLASS_NAME => $infoblockModelReflection->getShortName(),
                 BitInfoblockComm::NAMESPACE => $infoblockModelReflection->getNamespaceName(),
-                BitInfoblockComm::PARENT_NAMESPACE => $infoblockModelReflection->getNamespaceName(),
-                BitInfoblockComm::GENERATED_PARENT_NAMESPACE => $generatedInfoblockModelReflection->getNamespaceName(),
-                BitInfoblockComm::GENERATED_NAMESPACE => $generatedInfoblockModelReflection->getNamespaceName(),
+                BitInfoblockComm::PARENT_NAMESPACE => $infoblockModelReflection->getName(),
+                BitInfoblockComm::GENERATED_PARENT_NAMESPACE => $generatedInfoblockModelReflection->getName(),
+                BitInfoblockComm::GENERATED_NAMESPACE => $generatedInfoblockModelReflection->getName(),
                 BitInfoblockComm::GENERATED_PARENT_CLASS_NAME => $generatedInfoblockModelReflection->getShortName()
             ]);
-
-//            if ($generator->generate()) {
-//                $generator->placeFile(
-//                    $generator->getFullFilePath(),
-//                    $generator->getStubString()
-//                );
-//            }
         }
     }
 

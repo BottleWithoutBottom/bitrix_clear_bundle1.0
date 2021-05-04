@@ -20,7 +20,7 @@ abstract class AbstractGeneratorCommand
     {
         $this->prototype = $prototype;
         $this->stub = $stub;
-        $this->generator = new $generatorClassName($stub, $prototype);
+        $this->generator = new $generatorClassName($prototype, $stub);
     }
 
     abstract public function execute($params);

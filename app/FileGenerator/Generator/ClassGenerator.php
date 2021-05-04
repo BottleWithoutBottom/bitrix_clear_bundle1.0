@@ -42,7 +42,11 @@ class ClassGenerator extends AbstractGenerator
     public function generate(): bool
     {
         if (parent::generate()) {
-            if ($this->commentDemanded) $this->placeComment($this->getPrototype()->getComment());
+            if ($this->commentDemanded) {
+                $this->placeComment($this->getPrototype()->getComment());
+            } else {
+                $this->removeComment();
+            }
 
             $class = $this->getPrototype()->getClass();
             if (!empty($class)) {
@@ -91,12 +95,17 @@ class ClassGenerator extends AbstractGenerator
                 }
             }
         } else {
-            foreach ($this->commentStubs as $commentStub) {
-                if (strrpos($this->getStubString(), $commentStub)) {
-                    $newStub = str_replace($commentStub, '', $this->getStubString());
-                    $this->stubString = $newStub;
-                    return true;
-                }
+            $this->removeComment();
+        }
+    }
+
+    protected function removeComment()
+    {
+        foreach ($this->commentStubs as $commentStub) {
+            if (strrpos($this->getStubString(), $commentStub)) {
+                $newStub = str_replace($commentStub, '', $this->getStubString());
+                $this->stubString = $newStub;
+                return true;
             }
         }
     }

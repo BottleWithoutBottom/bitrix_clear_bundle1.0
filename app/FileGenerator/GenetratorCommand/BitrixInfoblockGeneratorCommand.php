@@ -44,10 +44,10 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
 
         $this->prototype->setSymbolCode($params[static::SYMBOL_CODE]);
         $this->prototype->setClassNameBySymbolCode();
-        $this->prototype->setCommentIsDemanded(false);
+        $this->generator->setCommentIsDemanded(false);
         $this->prototype->setNamespace($params[static::NAMESPACE]);
         $this->prototype->setParentNamespace($params[static::GENERATED_PARENT_NAMESPACE]);
-        $this->prototype->setParentClassName($params[static::GENERATED_PARENT_CLASS_NAME]);
+        $this->prototype->setParentClass($params[static::GENERATED_PARENT_CLASS_NAME]);
         return true;
     }
 
@@ -55,11 +55,12 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
     {
         if (empty($params)) return false;
         $this->prototype->setSymbolCode($params[static::SYMBOL_CODE]);
-        $this->prototype->setCommentIsDemanded(true);
+        $this->generator->setCommentIsDemanded(true);
+        $this->prototype->setComment($this->prototype->generated());
         $this->prototype->setClassNameBySymbolCode();
         $this->prototype->setNamespace($params[static::GENERATED_NAMESPACE]);
         $this->prototype->setParentNamespace($params[static::PARENT_NAMESPACE]);
-        $this->prototype->setParentClassName($params[static::PARENT_CLASS_NAME]);
+        $this->prototype->setParentClass($params[static::PARENT_CLASS_NAME]);
         $this->prototype->setInfoblockId($params[static::IBLOCK_ID]);
         $this->prototype->setBitrixProperties($params[static::PROPERTIES]);
         return true;

@@ -16,6 +16,7 @@ class BitrixInfoblockStub extends BitrixModelStub
     {
         return
 "<?php
+{{commentStub}}
 
 namespace {{namespace}};
 use {{parentNamespace}};
