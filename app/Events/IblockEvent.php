@@ -13,8 +13,6 @@ class IblockEvent extends Event
 {
     public function createModel($arFields)
     {
-        if (empty($arFields)) return false;
-
         $symbolCode = $arFields['CODE'];
 
         if (!empty($symbolCode)) {
@@ -57,8 +55,11 @@ class IblockEvent extends Event
 //                );
 //            }
         }
+    }
 
-        return false;
+    public function deleteModel($ID)
+    {
+        var_dump($ID);
     }
 
     private static function getPropertiesSymbolCodes($infoblockId)
