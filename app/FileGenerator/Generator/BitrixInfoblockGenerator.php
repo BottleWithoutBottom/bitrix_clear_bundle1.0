@@ -138,4 +138,16 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
 
         return false;
     }
+
+    public function getGeneratedFullFilePath()
+    {
+        if (empty($this->getFileName()) || empty($this->getGeneratedPath())) return false;
+
+        return $this->getPath() . $this->getFileName() . $this->ext;
+    }
+
+    public function getGeneratedPath()
+    {
+        return $this->generatedPath;
+    }
 }

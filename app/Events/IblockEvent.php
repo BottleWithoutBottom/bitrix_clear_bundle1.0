@@ -2,9 +2,11 @@
 
 namespace App\Events;
 
+use App\FileGenerator\Generator\BitrixInfoblockGenerator;
 use App\FileGenerator\Prototypes\BitrixInfoblockPrototype;
 use App\FileGenerator\Stubs\BitrixInfoblockStub;
 use App\FileGenerator\GenetratorCommand\BitrixInfoblockGeneratorCommand as BitInfoblockComm;
+use App\MVC\Models\Infoblock\Generated\GeneratedInfoblockModel;
 use App\MVC\Models\Infoblock\InfoblockModel;
 
 class IblockEvent extends Event
@@ -28,21 +30,24 @@ class IblockEvent extends Event
 //            $prototype->setInfoblockId($infoblockId);
 //            $prototype->setBitrixProperties($properties);
 //            $stub = new BitrixInfoblockStub();
-
             $command = new BitInfoblockComm(
+                new BitrixInfoblockStub(),
                 new BitrixInfoblockPrototype(),
-                new BitrixInfoblockStub()
+                BitrixInfoblockGenerator::class
             );
 
             $infoblockModelReflection = new \ReflectionClass(new InfoblockModel());
-
+            $generatedInfoblockModelReflection = new \ReflectionClass(new GeneratedInfoblockModel());
             $command->execute([
                 BitInfoblockComm::IBLOCK_ID => $infoblockId,
                 BitInfoblockComm::SYMBOL_CODE => $symbolCode,
                 BitInfoblockComm::PROPERTIES => $properties,
-                BitInfoblockComm::PARENT_CLASS_NAME => $infoblockModelReflection->getName(),
+                BitInfoblockComm::PARENT_CLASS_NAME => $infoblockModelReflection->getShortName(),
                 BitInfoblockComm::NAMESPACE => $infoblockModelReflection->getNamespaceName(),
-                BitInfoblockComm::PARENT_NAMESPACE => $infoblockModelReflection->getNamespaceName()
+                BitInfoblockComm::PARENT_NAMESPACE => $infoblockModelReflection->getNamespaceName(),
+                BitInfoblockComm::GENERATED_PARENT_NAMESPACE => $generatedInfoblockModelReflection->getNamespaceName(),
+                BitInfoblockComm::GENERATED_NAMESPACE => $generatedInfoblockModelReflection->getNamespaceName(),
+                BitInfoblockComm::GENERATED_PARENT_CLASS_NAME => $generatedInfoblockModelReflection->getShortName()
             ]);
 
 //            if ($generator->generate()) {

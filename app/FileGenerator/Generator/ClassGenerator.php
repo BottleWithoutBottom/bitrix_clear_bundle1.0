@@ -47,7 +47,7 @@ class ClassGenerator extends AbstractGenerator
             $class = $this->getPrototype()->getClass();
             if (!empty($class)) {
                 $this->placeClass($this->getPrototype());
-                $this->setFileName($this->getPrototype()->getClass());
+                $this->setFileName($class);
 
                 $namespace = $this->getPrototype()->getNamespace();
                 if (!empty($namespace)) {
@@ -80,7 +80,7 @@ class ClassGenerator extends AbstractGenerator
         return $preStringSymbol . $access . ' CONST ' . $name . ' = ' . "'" . $value . "'" . ';' . $breakStringSymbol;
     }
 
-    private function placeComment($comment)
+    protected function placeComment($comment)
     {
         if (!empty($comment)) {
             foreach ($this->commentStubs as $commentStub) {
@@ -101,7 +101,7 @@ class ClassGenerator extends AbstractGenerator
         }
     }
 
-    private function placeClass(
+    protected function placeClass(
         AbstractPrototype $prototype
     ) {
         $class = $prototype->getClass();
@@ -119,7 +119,7 @@ class ClassGenerator extends AbstractGenerator
         return false;
     }
 
-    private function placeNamespace(
+    protected function placeNamespace(
         AbstractPrototype $prototype
     ) {
         $namespace = $prototype->getNamespace();
@@ -136,7 +136,7 @@ class ClassGenerator extends AbstractGenerator
         return false;
     }
 
-    private function placeParentNamespace(
+    protected function placeParentNamespace(
         AbstractPrototype $prototype
     ) {
         $parentNamespace = $prototype->getParentNamespace();
@@ -163,7 +163,7 @@ class ClassGenerator extends AbstractGenerator
         return false;
     }
 
-    private function placeParentClass(
+    protected function placeParentClass(
         AbstractPrototype $prototype
     ) {
         $parentClass = $prototype->getParentClass();

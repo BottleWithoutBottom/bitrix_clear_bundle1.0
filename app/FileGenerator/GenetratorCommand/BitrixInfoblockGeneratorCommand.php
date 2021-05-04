@@ -10,9 +10,51 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
     public CONST PROPERTIES = 'properties';
     public CONST PARENT_NAMESPACE = 'parentNamespace';
     public CONST PARENT_CLASS_NAME = 'parentClass';
+    public CONST GENERATED_NAMESPACE = 'generatedNamespace';
+    public CONST GENERATED_PARENT_CLASS_NAME = 'generatedParentClass';
+    public CONST GENERATED_PARENT_NAMESPACE = 'generatedParentNamespace';
 
     public function execute($params)
     {
-        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r();echo("</pre>");die();
+        if ($this->initGeneratedPrototype($params)) {
+            if ($this->generator->generate()) {
+                if (
+                    $this->generator->placeFile(
+                    $this->generator->getGeneratedFullFilePath(),
+                    $this->generator->getStubString()
+                    )
+                ) {
+
+                }
+
+            }
+        }
+    }
+
+    private function initPrototype($params)
+    {
+        if (empty($params)) return false;
+
+        $this->prototype->setSymbolCode($params[static::SYMBOL_CODE]);
+        $this->prototype->setClassNameBySymbolCode();
+        $this->prototype->setCommentIsDemanded(false);
+        $this->prototype->setNamespace($params[static::NAMESPACE]);
+        $this->prototype->setParentNamespace($params[static::GENERATED_PARENT_NAMESPACE]);
+        $this->prototype->setParentClassName($params[static::GENERATED_PARENT_CLASS_NAME]);
+        return true;
+    }
+
+    private function initGeneratedPrototype($params)
+    {
+        if (empty($params)) return false;
+        $this->prototype->setSymbolCode($params[static::SYMBOL_CODE]);
+        $this->prototype->setCommentIsDemanded(true);
+        $this->prototype->setClassNameBySymbolCode();
+        $this->prototype->setNamespace($params[static::GENERATED_NAMESPACE]);
+        $this->prototype->setParentNamespace($params[static::PARENT_NAMESPACE]);
+        $this->prototype->setParentClassName($params[static::PARENT_CLASS_NAME]);
+        $this->prototype->setInfoblockId($params[static::IBLOCK_ID]);
+        $this->prototype->setBitrixProperties($params[static::PROPERTIES]);
+        return true;
     }
 }
