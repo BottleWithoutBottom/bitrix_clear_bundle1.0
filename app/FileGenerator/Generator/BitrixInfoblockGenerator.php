@@ -36,17 +36,13 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
     public function generate(): bool
     {
         if (parent::generate()) {
-
-            if ($this->placeSymbolCode($this->getPrototype())) {
-                if ($this->placeInfoblockId($this->getPrototype())) {
-                    $this->placeBitrixProperties(
-                        $this->getPrototype(),
-                        $this->getStub()
-                    );
-                }
-
-                return true;
-            }
+            $this->placeSymbolCode($this->getPrototype());
+            $this->placeInfoblockId($this->getPrototype());
+            $this->placeBitrixProperties(
+                $this->getPrototype(),
+                $this->getStub()
+            );
+            return true;
         }
 
         return false;
