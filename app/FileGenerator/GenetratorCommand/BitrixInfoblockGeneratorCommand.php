@@ -26,6 +26,7 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
                 ) {
                     if ($this->initPrototype($params)) {
                         if ($this->generator->generate()) {
+                            while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($this->generator->getFullFilePath());echo("</pre>");die();
                             $this->generator->placeFile(
                                 $this->generator->getFullFilePath(),
                                 $this->generator->getStubString()
