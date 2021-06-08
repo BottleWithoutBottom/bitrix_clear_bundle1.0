@@ -9,6 +9,7 @@ use App\FileGenerator\Stubs\ClassStub;
 
 class BitrixInfoblockGenerator extends BitrixModelGenerator
 {
+    protected $generatedMode = false;
     protected $generatedPath;
 
     protected $symbolCodeStubs = [
@@ -36,25 +37,20 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
     public function generate(): bool
     {
         if (parent::generate()) {
-            $this->placeSymbolCode($this->getPrototype());
-            $this->placeInfoblockId($this->getPrototype());
-            $this->placeBitrixProperties(
-                $this->getPrototype(),
-                $this->getStub()
-            );
+
+            if ($this->getGeneratedMode()) {
+                $this->placeSymbolCode($this->getPrototype());
+                $this->placeInfoblockId($this->getPrototype());
+                $this->placeBitrixProperties(
+                    $this->getPrototype(),
+                    $this->getStub()
+                );
+            } else {
+                $this->clearSymbolCode();
+                $this->clearInfoblockId();
+                $this->clearBitrixProperties($this->getStub());
+            }
             return true;
-        }
-
-        return false;
-    }
-
-    public function setClassNameBySymbolCode()
-    {
-        if (!empty($this->getPrototype()->getSymbolCode())) {
-            $fileName = mb_strtolower($this->getPrototype()->getSymbolCode());
-
-            $fileName = preg_replace('^ib_', '', $fileName);
-            return $this->setFileName(ucfirst($fileName));
         }
 
         return false;
@@ -82,7 +78,6 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
         BitrixInfoblockPrototype $prototype,
         BitrixInfoblockStub $stub
     ) {
-        $propertyStub = $stub->getBitrixProperiesStub();
         $properties = $prototype->getBitrixProperties();
         $propertiesCount = count($properties);
         if ($propertiesCount) {
@@ -110,12 +105,9 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
             }
 
         } else {
-            if (strrpos($this->getStubString(), $propertyStub)) {
-                $newStub = str_replace($propertyStub, '', $this->getStubString());
-                $this->stubString = $newStub;
-                return true;
-            }
+            return $this->clearBitrixProperties($stub);
         }
+        return false;
     }
 
     protected function placeInfoblockId(BitrixInfoblockPrototype $prototype)
@@ -135,6 +127,28 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
         return false;
     }
 
+    protected function clearSymbolCode()
+    {
+
+    }
+
+    protected function clearInfoblockId()
+    {
+
+    }
+
+    protected function clearBitrixProperties(
+        BitrixInfoblockStub $stub
+    ) {
+        $propertyStub = $stub->getBitrixProperiesStub();
+        if (strrpos($this->getStubString(), $propertyStub)) {
+            $newStub = str_replace($propertyStub, '', $this->getStubString());
+            $this->stubString = $newStub;
+        }
+
+        return true;
+    }
+
     public function getGeneratedFullFilePath()
     {
         if (empty($this->getFileName()) || empty($this->getGeneratedPath())) return false;
@@ -145,5 +159,15 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
     public function getGeneratedPath()
     {
         return $this->generatedPath;
+    }
+
+    public function setGeneratedMode($mode)
+    {
+        $this->generatedMode = $mode;
+    }
+
+    public function getGeneratedMode()
+    {
+        return $this->generatedMode;
     }
 }
