@@ -2,7 +2,9 @@
 
 namespace App\MVC\View;
 
-class View
+use App\MVC\Models\Vendor\Response;
+
+class View extends Response
 {
     /**
      * @param string $viewName - название view
