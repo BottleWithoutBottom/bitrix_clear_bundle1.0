@@ -46,8 +46,8 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
                     $this->getStub()
                 );
             } else {
-                $this->clearSymbolCode();
-                $this->clearInfoblockId();
+                $this->clearSymbolCode($this->getStub());
+                $this->clearInfoblockId($this->getStub());
                 $this->clearBitrixProperties($this->getStub());
             }
             return true;
@@ -127,19 +127,36 @@ class BitrixInfoblockGenerator extends BitrixModelGenerator
         return false;
     }
 
-    protected function clearSymbolCode()
+    protected function clearSymbolCode(BitrixInfoblockStub $stub)
     {
+        foreach ($this->symbolCodeStubs as $symbolCodeStub) {
+            if (strrpos($this->getStubString(), $symbolCodeStub)) {
+                $symbolCodePropertyStub = $stub->getSymbolCodeStub();
+                $newStub = str_replace($symbolCodePropertyStub, '', $this->getStubString());
+                $this->stubString = $newStub;
+                return true;
+            }
+        }
 
+        return false;
     }
 
-    protected function clearInfoblockId()
+    protected function clearInfoblockId(BitrixInfoblockStub $stub)
     {
+        foreach ($this->infoblockIdStubs as $infoblockIdStub) {
+            if (strrpos($this->getStubString(), $infoblockIdStub)) {
+                $infoblockIdPropertyStub = $stub->getInfoblockIdStub();
+                $newStub = str_replace($infoblockIdPropertyStub, '', $this->getStubString());
+                $this->stubString = $newStub;
+                return true;
+            }
+        }
 
+        return false;
     }
 
-    protected function clearBitrixProperties(
-        BitrixInfoblockStub $stub
-    ) {
+    protected function clearBitrixProperties(BitrixInfoblockStub $stub)
+    {
         $propertyStub = $stub->getBitrixProperiesStub();
         if (strrpos($this->getStubString(), $propertyStub)) {
             $newStub = str_replace($propertyStub, '', $this->getStubString());
