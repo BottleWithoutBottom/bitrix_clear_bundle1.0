@@ -9,6 +9,8 @@ use App\FileGenerator\Stubs\ClassStub;
 class ClassGenerator extends AbstractGenerator
 {
     protected $commentDemanded = false;
+    protected $parentClassAlternativeNameDemanded = false;
+    protected $parentClassAlternativeName = '';
 
     protected $commentStubs = [
         '{{commentStub}}', '{{ commentStub }}'
@@ -153,6 +155,10 @@ class ClassGenerator extends AbstractGenerator
         if (!empty($parentNamespace)) {
             foreach ($this->parentNamespaceStubs as $parentNamespaceStub) {
                 if (strrpos($this->getStubString(), $parentNamespaceStub)) {
+                    //Здесь добавляется альтернативное имя класса, для того, чтобы избежать конфликта одинаковых названий у классов
+                    if ($this->getParentClassAlternativeNameDemanded() && !empty($this->getParentClassAlternativeName())) {
+                        $parentNamespace = $this->getParentClassAlternativeNameString($parentNamespace);
+                    }
                     $newStub = str_replace($parentNamespaceStub, $parentNamespace, $this->getStubString());
                     $this->stubString = $newStub;
                     return true;
@@ -180,6 +186,11 @@ class ClassGenerator extends AbstractGenerator
         if (!empty($parentClass)) {
             foreach ($this->parentClassStubs as $parentClassStub) {
                 if (strrpos($this->getStubString(), $parentClassStub)) {
+                    //Здесь добавляется альтернативное имя класса, для того, чтобы избежать конфликта одинаковых названий у классов
+                    if ($this->getParentClassAlternativeNameDemanded() && !empty($this->getParentClassAlternativeName())) {
+                        $parentClass = $this->getParentClassAlternativeName();
+                    }
+
                     $newStub = str_replace($parentClassStub, $parentClass, $this->getStubString());
                     $this->stubString = $newStub;
                     return true;
@@ -202,5 +213,33 @@ class ClassGenerator extends AbstractGenerator
     public function setCommentIsDemanded(bool $demanded = false)
     {
         $this->commentDemanded = $demanded;
+    }
+
+    public function setParentClassAlternativeNameDemanded($demanded = false)
+    {
+        $this->parentClassAlternativeNameDemanded = $demanded;
+    }
+
+    public function getParentClassAlternativeNameDemanded()
+    {
+        return $this->parentClassAlternativeNameDemanded;
+    }
+
+    public function getParentClassAlternativeName()
+    {
+        return $this->parentClassAlternativeName;
+    }
+
+    public function setParentClassAlternativeName($name)
+    {
+        if (empty($name)) return false;
+
+        $this->parentClassAlternativeName = $name;
+        return true;
+    }
+
+    public function getParentClassAlternativeNameString($string)
+    {
+        return $string . ' as ' . $this->getParentClassAlternativeName();
     }
 }

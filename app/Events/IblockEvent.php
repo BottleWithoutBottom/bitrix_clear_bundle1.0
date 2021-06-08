@@ -34,9 +34,7 @@ class IblockEvent extends Event
                 BitInfoblockComm::PARENT_CLASS_NAME => $infoblockModelReflection->getShortName(),
                 BitInfoblockComm::NAMESPACE => $infoblockModelReflection->getNamespaceName(),
                 BitInfoblockComm::PARENT_NAMESPACE => $infoblockModelReflection->getName(),
-                BitInfoblockComm::GENERATED_PARENT_NAMESPACE => $generatedInfoblockModelReflection->getName(),
-                BitInfoblockComm::GENERATED_NAMESPACE => $generatedInfoblockModelReflection->getName(),
-                BitInfoblockComm::GENERATED_PARENT_CLASS_NAME => $generatedInfoblockModelReflection->getShortName()
+                BitInfoblockComm::GENERATED_NAMESPACE => $generatedInfoblockModelReflection->getNamespaceName(),
             ]);
         }
     }

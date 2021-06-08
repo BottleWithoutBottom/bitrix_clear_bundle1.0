@@ -13,6 +13,7 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
     public CONST GENERATED_NAMESPACE = 'generatedNamespace';
     public CONST GENERATED_PARENT_CLASS_NAME = 'generatedParentClass';
     public CONST GENERATED_PARENT_NAMESPACE = 'generatedParentNamespace';
+    public CONST GENERATED_CLASS_NAME = 'Generated';
 
     public function execute($params)
     {
@@ -24,9 +25,10 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
                     $this->generator->getStubString()
                     )
                 ) {
+                    $params[static::GENERATED_PARENT_CLASS_NAME] = $this->prototype->getClass();
+                    $params[static::GENERATED_PARENT_NAMESPACE] = $this->prototype->getNamespace() . '\\' . $this->prototype->getClass();
                     if ($this->initPrototype($params)) {
                         if ($this->generator->generate()) {
-                            while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($this->generator->getFullFilePath());echo("</pre>");die();
                             $this->generator->placeFile(
                                 $this->generator->getFullFilePath(),
                                 $this->generator->getStubString()
@@ -46,8 +48,11 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
         $this->prototype->setSymbolCode($params[static::SYMBOL_CODE]);
         $this->prototype->setClassNameBySymbolCode();
         $this->generator->setCommentIsDemanded(false);
+        $this->generator->setGeneratedMode(false);
         $this->prototype->setNamespace($params[static::NAMESPACE]);
         $this->prototype->setParentNamespace($params[static::GENERATED_PARENT_NAMESPACE]);
+        $this->generator->setParentClassAlternativeNameDemanded(true);
+        $this->generator->setParentClassAlternativeName(static::GENERATED_CLASS_NAME);
         $this->prototype->setParentClass($params[static::GENERATED_PARENT_CLASS_NAME]);
         return true;
     }
@@ -57,6 +62,7 @@ class BitrixInfoblockGeneratorCommand extends AbstractGeneratorCommand
         if (empty($params)) return false;
         $this->prototype->setSymbolCode($params[static::SYMBOL_CODE]);
         $this->generator->setCommentIsDemanded(true);
+        $this->generator->setGeneratedMode(true);
         $this->prototype->setComment($this->prototype->generated());
         $this->prototype->setClassNameBySymbolCode();
         $this->prototype->setNamespace($params[static::GENERATED_NAMESPACE]);

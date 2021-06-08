@@ -8,8 +8,13 @@ use App\FileGenerator\Stubs\AbstractStub;
 
 abstract class AbstractGeneratorCommand
 {
+    /** @property AbstractPrototype $prototype */
     protected $prototype;
+
+    /** @property AbstractStub $prototype */
     protected $stub;
+
+    /** @property AbstractGenerator $prototype */
     protected $generator;
 
     public function __construct(
